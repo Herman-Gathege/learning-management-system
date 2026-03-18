@@ -159,13 +159,12 @@ git clone https://github.com/Herman-Gathege/learning-management-system
 cd lms-project
 2. Backend Setup
 cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+
+use uv init to start the virtual environment
+use uv run pip install -r requirements.txt {to install dependencies}
+use uv run flask run {to start the app}
 
 Create .env:
-
-
 
 Run:
 
