@@ -124,7 +124,7 @@ def me():
             "full_name": user.full_name,
             "email": user.email,
             "role": user.role,
-            "branch_id": user.branch_id
+            # "branch_id": user.branch_id
         }
     }
 
@@ -142,4 +142,80 @@ def me():
 
     return jsonify(response)
 
+    
 
+# -------------------------
+# Register User (Learner/Admin)
+# -------------------------
+@auth_bp.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+
+    print("REGISTER DATA:", data)  # 🔍 debug
+
+    if not data or not data.get("email") or not data.get("password"):
+        return jsonify({"error": "Email and password required"}), 400
+
+    # prevent duplicate users
+    existing_user = User.query.filter_by(email=data.get("email")).first()
+    if existing_user:
+        return jsonify({"error": "User already exists"}), 400
+
+    role = data.get("role", "learner")
+
+    organization_id = None
+
+    # -------------------------
+    # 🧠 ADMIN FLOW (create org)
+    # -------------------------
+    if role == "admin":
+        if not data.get("organization_name"):
+            return jsonify({"error": "Organization name required"}), 400
+
+        # prevent duplicate org
+        existing_org = Organization.query.filter_by(
+            name=data.get("organization_name")
+        ).first()
+
+        if existing_org:
+            return jsonify({"error": "Organization already exists"}), 400
+
+        org = Organization(
+            name=data.get("organization_name")
+        )
+
+        db.session.add(org)
+        db.session.flush()  # get ID before commit
+
+        organization_id = org.id
+
+    # -------------------------
+    # 🎓 LEARNER FLOW (join org)
+    # -------------------------
+    elif role == "learner":
+        if data.get("organization_name"):
+            org = Organization.query.filter_by(
+                name=data.get("organization_name")
+            ).first()
+
+            if not org:
+                return jsonify({"error": "Organization not found"}), 404
+
+            organization_id = org.id
+
+    # -------------------------
+    # CREATE USER
+    # -------------------------
+    user = User(
+        email=data.get("email"),
+        role=role,
+        organization_id=organization_id,
+        full_name=data.get("full_name")
+    )
+
+    user.set_password(data.get("password"))
+
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({"message": "User registered successfully"}), 201

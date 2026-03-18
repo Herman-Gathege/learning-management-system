@@ -15,10 +15,10 @@ export default function DashboardDecision() {
       }
 
       // Redirect based on role
-      if (user.role === "owner") {
-        navigate("/owner/dashboard", { replace: true });
-      } else if (user.role === "staff") {
-        navigate("/staff/dashboard", { replace: true });
+      if (user.role === "admin") {
+        navigate("/admin/dashboard", { replace: true });
+      } else if (user.role === "learner") {
+        navigate("/learner/dashboard", { replace: true });
       } else if (user.role === "super_admin") {
       navigate("/super-admin/dashboard", { replace: true });    
       } else {

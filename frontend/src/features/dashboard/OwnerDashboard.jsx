@@ -4,5 +4,5 @@ import DashboardContent from "./DashboardContent";
 
 
 export default function OwnerDashboard() {
-  return <DashboardContent roleLabel="Owner" />;
+  return <DashboardContent roleLabel="Admin" />;
 }

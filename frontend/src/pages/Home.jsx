@@ -5,48 +5,29 @@ export default function Home() {
 
   return (
     <div className="home">
-      {/* ================= NAVBAR ================= */}
-      {/* <header className="navbar">
-        <div className="page-container flex justify-between items-center h-full hidden-on-mobile">
-          <div className="home-nav-logo " onClick={() => navigate("/")}>
-            <img src="/assets/azani-logo 1.png" alt="Azani SmartDuka Logo" />
-          </div>
-
-          <div className="flex gap-md">
-            <button
-              className="btn btn-secondary"
-              onClick={() => navigate("/login")}
-            >
-              Sign In
-            </button>
-
-            
-          </div>
-        </div>
-      </header> */}
-
       {/* ================= HERO ================= */}
-      <section className="home-hero">
-        <div className="page-container home-hero-grid">
+      <section className="home-hero mt-lg">
+        <div className="page-container home-hero-grid mt-lg">
           {/* LEFT */}
           <div className="home-hero-content">
             <h1>
-              Run your business with{" "}
-              <span className="company-blue">clarity</span> and confidence
+              Learn smarter with{" "}
+              <span className="company-blue">clarity</span> and structure
             </h1>
 
             <p className="text-muted">
-              Azani SmartDuka helps small and medium businesses track stock,
-              sales, and staff activity — without complexity or guesswork.
+              A simple Learning Management System that helps learners track
+              progress and enables admins to manage courses with ease.
             </p>
 
-            <div className="flex gap-md mt-md">
-              {/* <button
+            <div className="flex gap-md mt-md mb-md">
+              <button
                 className="btn btn-primary"
                 onClick={() => navigate("/register")}
               >
-                Get Started Free
-              </button> */}
+                Get Started
+              </button>
+
               <button
                 className="btn btn-secondary"
                 onClick={() => navigate("/login")}
@@ -58,60 +39,58 @@ export default function Home() {
 
           {/* RIGHT */}
           <div className="home-hero-image hidden-on-mobile">
-            <img src="/assets/hero.jpeg" alt="Dashboard preview" />
+            <img src="/assets/hero.jpeg" alt="LMS dashboard preview" />
           </div>
         </div>
       </section>
 
-      {/* ================= TRUST / PROOF ================= */}
-<section className="home-trust">
-  <div className="page-container home-trust-content">
+      {/* ================= TRUST ================= */}
+      <section className="home-trust">
+        <div className="page-container home-trust-content">
+          <p className="trust-text text-center">
+            Built for <strong>learners and educators</strong> who need a simple,
+            effective way to manage and track learning progress.
+          </p>
 
-    <p className="trust-text text-center">
-      Trusted by <strong>shops, marts, hardware stores</strong>, and
-      sales-driven SMEs that need visibility — not complexity.
-    </p>
-
-    <div className="home-trust-image">
-      <img
-        src="/assets/demo-dash.png"
-        alt="Azani SmartDuka dashboard overview"
-      />
-    </div>
-
-  </div>
-</section>
-
+          <div className="home-trust-image">
+            <img
+              src="/assets/demo-dash.png"
+              alt="LMS dashboard overview"
+            />
+          </div>
+        </div>
+      </section>
 
       {/* ================= FEATURES ================= */}
       <section className="home-features">
         <div className="page-container">
           <h2 className="text-center">
-            Everything you need to stay in control
+            Everything you need to manage learning
           </h2>
+
           <p className="text-center text-muted mb-lg">
-            A clear picture of your business — in seconds.
+            Designed to keep both admins and learners in control.
           </p>
 
           <div className="home-feature-grid">
             <div className="card">
-              <h3>Stock Management</h3>
+              <h3>Course Management</h3>
               <p className="text-muted">
-                Track inventory, spot low stock early, and reduce losses.
+                Create and organize courses with structured lessons.
               </p>
             </div>
 
             <div className="card">
-              <h3>Sales Tracking</h3>
+              <h3>Progress Tracking</h3>
               <p className="text-muted">
-                See daily sales and performance at a glance.
+                Monitor lesson completion and overall progress.
               </p>
             </div>
 
             <div className="card">
-              <h3>Staff Accountability</h3>
+              <h3>Simple Learning Experience</h3>
               <p className="text-muted">
-                Assign roles and ensure every sale is recorded.
+                Clean interface focused on clarity and usability.
               </p>
             </div>
           </div>
@@ -125,24 +104,27 @@ export default function Home() {
         <div className="home-step-grid">
           <div className="card text-center">
             <strong>1</strong>
-            <p>Create your business account</p>
+            <p>Create your account</p>
           </div>
+
           <div className="card text-center">
             <strong>2</strong>
-            <p>Add stock and staff</p>
+            <p>Browse or create courses</p>
           </div>
+
           <div className="card text-center">
             <strong>3</strong>
-            <p>Track sales and stay in control</p>
+            <p>Track progress and complete lessons</p>
           </div>
         </div>
       </section>
 
       {/* ================= CTA ================= */}
       <section className="home-cta text-center">
-        <h2>Start managing your business with confidence</h2>
+        <h2>Start your learning journey today</h2>
+
         <p className="text-muted mb-md">
-          Join business owners replacing guesswork with clarity.
+          Join users managing their learning with clarity and structure.
         </p>
 
         <button
@@ -156,19 +138,12 @@ export default function Home() {
       {/* ================= FOOTER ================= */}
       <footer className="home-footer text-center">
         <p className="text-sm">
-          © {new Date().getFullYear()} Azani SmartDuka. Built for growing
-          businesses.
+          © {new Date().getFullYear()} LMS Prototype
         </p>
+
         <p className="text-sm">
-          A product by{" "}
-          <a
-            href="https://webloom-tech.onrender.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="company-blue"
-          >
-            Webloom Tech
-          </a>
+          Built by{" "}
+          <span className="company-blue">Herman Gathege</span>
         </p>
       </footer>
     </div>

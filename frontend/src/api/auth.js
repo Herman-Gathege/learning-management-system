@@ -16,6 +16,18 @@ export const loginUser = async (data) => {
   return res.json();
 };
 
+export const registerUser = async (data) => {
+  const res = await fetch(`${API}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) throw new Error("Registration failed");
+
+  return res.json();
+};
+
 // export const getMe = async () => {
 //   const res = await fetch(`${API}/me`, {
 //     headers: {
@@ -38,7 +50,7 @@ export const getMe = async () => {
 
 
 export async function registerOrg(data) {
-  const res = await fetch(`${API}/register`, {
+  const res = await fetch(`${API}/register-org`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
