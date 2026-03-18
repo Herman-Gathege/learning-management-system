@@ -21,3 +21,4 @@ class Config:
         "pool_size": 5,
         "max_overflow": 10,
     }
+
