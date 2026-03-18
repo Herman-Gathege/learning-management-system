@@ -9,6 +9,7 @@ import Register from "../features/auth/Register";
 // Dashboards
 import DashboardContent from "../features/dashboard/DashboardContent";
 import StudentDashboard from "../features/dashboard/StudentDashboard";
+import DashboardDecision from "../features/dashboard/DashboardDecision";
 
 // Route protection
 import ProtectedRoute from "./ProtectedRoute";
@@ -24,6 +25,7 @@ export default function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/dashboard" element={<DashboardDecision />} />
 
       {/* ================= ADMIN ================= */}
       <Route

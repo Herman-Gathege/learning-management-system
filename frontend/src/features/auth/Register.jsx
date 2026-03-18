@@ -39,8 +39,8 @@ export default function Register() {
       });
 
       // ✅ 3. STORE TOKENS
-      localStorage.setItem("access_token", loginRes.access_token);
-      localStorage.setItem("refresh_token", loginRes.refresh_token);
+      localStorage.setItem("token", loginRes.access_token);
+      localStorage.setItem("refresh", loginRes.refresh_token);
 
       // ✅ 4. REDIRECT BASED ON ROLE
       if (role === "admin") {
@@ -115,8 +115,8 @@ export default function Register() {
         )}
         <p className="text-sm text-center">
           Don't have an account?{" "}
-          <a href="/register" className="text-link">
-            Register here
+          <a href="/login" className="text-link">
+            Login here
           </a>
         </p>
       </form>

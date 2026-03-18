@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { loginUser } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 // import styles from "./AuthForm.module.css"; // CSS module for styling
 
@@ -12,6 +13,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate(); // ✅ HERE (top level)
+  const { login, user } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,18 +26,14 @@ export default function Login() {
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("refresh", data.refresh_token);
 
-      const token = data.access_token;
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const role = payload.role;
+      // const token = data.access_token;
+      // const payload = JSON.parse(atob(token.split(".")[1]));
+      // const role = payload.role;
 
-      if (role === "admin") {
-        navigate("/admin/dashboard");
-      } else if (role === "learner") {
-        navigate("/learner/dashboard");
-      } else {
-        navigate("/");
-      }
+      await login();
+      navigate("/dashboard");
 
+      
     } catch (err) {
       setError("Invalid email or password");
       console.error(err);
@@ -84,4 +82,3 @@ export default function Login() {
     </div>
   );
 }
-   

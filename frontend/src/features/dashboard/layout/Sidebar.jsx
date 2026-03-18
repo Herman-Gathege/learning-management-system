@@ -23,9 +23,9 @@ export default function Sidebar() {
     const saved = localStorage.getItem("sidebarCollapsed");
     return saved === "true"; // default false if null
   });
-  const [stockOpen, setStockOpen] = useState(false);
-  const [customerOpen, setCustomerOpen] = useState(false);
-  const [supplierOpen, setSupplierOpen] = useState(false);
+  // const [stockOpen, setStockOpen] = useState(false);
+  // const [customerOpen, setCustomerOpen] = useState(false);
+  // const [supplierOpen, setSupplierOpen] = useState(false);
 
   // ---------------------------
   // Role flags
