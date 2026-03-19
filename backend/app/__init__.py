@@ -2,7 +2,7 @@
 from flask import Flask
 from flask_cors import CORS
 from .config import Config
-from .extensions import db, jwt, migrate
+from .extensions import db, jwt, migrate, init_mongo
 
 from .auth.routes import auth_bp
 from .modules.courses.routes import course_bp
@@ -19,6 +19,8 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
+    
+    init_mongo(app)
 
     # JWT error handlers
     @jwt.unauthorized_loader
