@@ -181,6 +181,10 @@ from root directory run:
   docker compose build frontend
   docker compose up -d
 
+making changes: 
+  docker compose build --no-cache frontend or backend
+  docker compose up
+
 
 This starts:
 
