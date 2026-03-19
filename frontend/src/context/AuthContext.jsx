@@ -1,6 +1,3 @@
-
-
-
 //frontend/src/context/AuthContext.jsx
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -14,6 +11,17 @@ export function AuthProvider({ children }) {
   const [branchId, setBranchId] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const login = async () => {
+    try {
+      const res = await getMe();
+
+      setUser(res.user);
+      setOrganization(res.organization);
+    } catch {
+      logout();
+    }
+  };
 
   const logout = () => {
     localStorage.clear();
@@ -38,7 +46,6 @@ export function AuthProvider({ children }) {
         // ✅ Extract branch & device from response
         setBranchId(res.user?.branch_id || null);
         setDeviceId(res.device?.id || res.user?.device_id || null);
-
       } catch {
         localStorage.clear();
         setUser(null);
@@ -62,6 +69,7 @@ export function AuthProvider({ children }) {
         deviceId,
         loading,
         logout,
+        login,
       }}
     >
       {children}

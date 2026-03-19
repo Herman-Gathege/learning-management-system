@@ -23,72 +23,72 @@ export default function Sidebar() {
     const saved = localStorage.getItem("sidebarCollapsed");
     return saved === "true"; // default false if null
   });
-  const [stockOpen, setStockOpen] = useState(false);
-  const [customerOpen, setCustomerOpen] = useState(false);
-  const [supplierOpen, setSupplierOpen] = useState(false);
+  // const [stockOpen, setStockOpen] = useState(false);
+  // const [customerOpen, setCustomerOpen] = useState(false);
+  // const [supplierOpen, setSupplierOpen] = useState(false);
 
   // ---------------------------
   // Role flags
   // ---------------------------
-  const isOwner = user?.role === "owner";
-  const isStaff = user?.role === "staff";  
+  const isOwner = user?.role === "admin";
+  const isStaff = user?.role === "learner";  
   const isSuperAdmin = user?.role === "super_admin";
 
   // ---------------------------
   // Routes
   // ---------------------------
-  const stockRoutes = [
-    "/owner/stock",
-    "/owner/stock/add",
-    "/owner/stock/history",
-  ];
+  // const stockRoutes = [
+  //   "/owner/stock",
+  //   "/owner/stock/add",
+  //   "/owner/stock/history",
+  // ];
 
-  const customerRoutes = [
-    "/owner/customers/debtors",
-    "/owner/customers/creditors",
-    "/owner/customers/add",
-    "/owner/all/customers",
-  ];
+  // const customerRoutes = [
+  //   "/owner/customers/debtors",
+  //   "/owner/customers/creditors",
+  //   "/owner/customers/add",
+  //   "/owner/all/customers",
+  // ];
 
-  const supplierRoutes = [
-    "/owner/suppliers",
-    "/owner/supplier-purchases",
-    "/owner/supplier-payments",
-  ];
+  // const supplierRoutes = [
+  //   "/owner/suppliers",
+  //   "/owner/supplier-purchases",
+  //   "/owner/supplier-payments",
+  // ];
 
-  const isStockRouteActive = stockRoutes.some((path) =>
-    location.pathname.startsWith(path),
-  );
+  // const isStockRouteActive = stockRoutes.some((path) =>
+  //   location.pathname.startsWith(path),
+  // );
 
-  const isCustomerRouteActive = customerRoutes.some((path) =>
-    location.pathname.startsWith(path),
-  );
+  // const isCustomerRouteActive = customerRoutes.some((path) =>
+  //   location.pathname.startsWith(path),
+  // );
 
-  const isSupplierRouteActive = supplierRoutes.some((path) =>
-    location.pathname.startsWith(path),
-  );
+  // const isSupplierRouteActive = supplierRoutes.some((path) =>
+  //   location.pathname.startsWith(path),
+  // );
 
   // ---------------------------
   // Open dropdowns if route is active
   // ---------------------------
-  useEffect(() => {
-    if (isStockRouteActive) setStockOpen(true);
-    if (isCustomerRouteActive) setCustomerOpen(true);
-    if (isSupplierRouteActive) setSupplierOpen(true);
-  }, [isStockRouteActive, isCustomerRouteActive, isSupplierRouteActive]);
+  // useEffect(() => {
+  //   if (isStockRouteActive) setStockOpen(true);
+  //   if (isCustomerRouteActive) setCustomerOpen(true);
+  //   if (isSupplierRouteActive) setSupplierOpen(true);
+  // }, [isStockRouteActive, isCustomerRouteActive, isSupplierRouteActive]);
 
-  /* 🔥 IMPORTANT FIX */
-  useEffect(() => {
-    if (collapsed) {
-      setStockOpen(false);
-      setCustomerOpen(false);
-      setSupplierOpen(false);
-    }
-  }, [collapsed]);
+  // /* 🔥 IMPORTANT FIX */
+  // useEffect(() => {
+  //   if (collapsed) {
+  //     setStockOpen(false);
+  //     setCustomerOpen(false);
+  //     setSupplierOpen(false);
+  //   }
+  // }, [collapsed]);
 
-  useEffect(() => {
-  localStorage.setItem("sidebarCollapsed", collapsed);
-  }, [collapsed]);
+  // useEffect(() => {
+  // localStorage.setItem("sidebarCollapsed", collapsed);
+  // }, [collapsed]);
 
 
   if (!user) return null;
@@ -125,18 +125,18 @@ export default function Sidebar() {
         {/* ================= OWNER ================= */}
         {isOwner && (
           <>
-            <NavLink to="/owner/dashboard" end className={linkClass}>
+            <NavLink to="/admin/dashboard" end className={linkClass}>
               <FiHome />
               {!collapsed && <span>Home</span>}
             </NavLink>
 
-            <NavLink to="/owner/sales" className={linkClass}>
+            {/* <NavLink to="/owner/sales" className={linkClass}>
               <FiBarChart2 />
               {!collapsed && <span>View All Sales</span>}
-            </NavLink>
+            </NavLink> */}
 
             {/* -------- SUPPLIERS -------- */}
-            <button
+            {/* <button
               type="button"
               className={`sidebar-link ${
                 isSupplierRouteActive ? "active" : ""
@@ -167,7 +167,7 @@ export default function Sidebar() {
             )}
 
             {/* -------- STOCK -------- */}
-            <button
+            {/* <button
               type="button"
               className={`sidebar-link ${isStockRouteActive ? "active" : ""}`}
               onClick={() => setStockOpen((o) => !o)}
@@ -196,7 +196,7 @@ export default function Sidebar() {
             )}
 
             {/* -------- CUSTOMERS -------- */}
-            <button
+            {/* <button
               type="button"
               className={`sidebar-link ${
                 isCustomerRouteActive ? "active" : ""
@@ -239,7 +239,7 @@ export default function Sidebar() {
             <NavLink to="/owner/settings" className={linkClass}>
               <FiSettings />
               {!collapsed && <span>Settings</span>}
-            </NavLink>
+            </NavLink> */}
           </>
         )}
 
@@ -251,7 +251,7 @@ export default function Sidebar() {
               {!collapsed && <span>Dashboard</span>}
             </NavLink>
 
-            <NavLink to="/staff/profile" className={linkClass}>
+            {/* <NavLink to="/staff/profile" className={linkClass}>
               <FiUsers />
               {!collapsed && <span>My Profile</span>}
             </NavLink>
@@ -259,7 +259,7 @@ export default function Sidebar() {
             <NavLink to="/staff/password" className={linkClass}>
               <FiFileText />
               {!collapsed && <span>Change Password</span>}
-            </NavLink>
+            </NavLink> */}
           </>
         )}
 

@@ -5,8 +5,16 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///app.db")
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+
+    if not DATABASE_URL:
+        raise RuntimeError("DATABASE_URL is not set")
+
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
+
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)

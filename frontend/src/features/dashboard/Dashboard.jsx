@@ -14,12 +14,12 @@ export default function Dashboard() {
   }
 
   // Role-based decision
-  if (user.role === "owner") {
-    return <Navigate to="/owner/dashboard" replace />;
+  if (user.role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
   }
 
-  if (user.role === "staff") {
-    return <Navigate to="/staff/dashboard" replace />;
+  if (user.role === "learner") {
+    return <Navigate to="/learner/dashboard" replace />;
   }
 
   // Fallback (should never happen)

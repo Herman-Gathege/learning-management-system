@@ -2,9 +2,13 @@
 from flask import Flask
 from flask_cors import CORS
 from .config import Config
-from .extensions import db, jwt, migrate
+from .extensions import db, jwt, migrate, init_mongo
 
 from .auth.routes import auth_bp
+from .modules.courses.routes import course_bp
+from app.modules.debug.routes import debug_bp
+
+
 
 
 def create_app():
@@ -15,6 +19,8 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
+    
+    init_mongo(app)
 
     # JWT error handlers
     @jwt.unauthorized_loader
@@ -42,6 +48,10 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(course_bp, url_prefix="/api/courses")
+    # app.register_blueprint(debug_bp, url_prefix="/debug")
+    app.register_blueprint(debug_bp)
+
 
 
     return app

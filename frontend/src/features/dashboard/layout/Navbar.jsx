@@ -33,7 +33,7 @@ export default function Navbar() {
   if (!user) return <header className="navbar" />;
 
    const navigation =
-    user.role === "owner"
+    user.role === "admin"
       ? ownerNavigation
       : user.role === "super_admin"
       ? superAdminNavigation
@@ -86,7 +86,7 @@ export default function Navbar() {
           className="avatar cursor-pointer"
           onClick={() => setOpen((o) => !o)}
         >
-          {user.full_name.charAt(0).toUpperCase()}
+          (user.full_name?.charAt(0) || "U").toUpperCase()
         </div>
 
         {/* Chevron */}
@@ -107,7 +107,7 @@ export default function Navbar() {
               {/* USER HEADER */}
               <div className="dropdown-header">
                 <div className="avatar avatar-sm">
-                  {user.full_name.charAt(0).toUpperCase()}
+                  (user.full_name?.charAt(0) || "U").toUpperCase()
                 </div>
 
                 <div className="dropdown-user-info">

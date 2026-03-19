@@ -157,25 +157,34 @@ lms-project/
 ```bash
 git clone https://github.com/Herman-Gathege/learning-management-system
 cd lms-project
+
 2. Backend Setup
 cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+
+use uv init to start the virtual environment
+use uv run pip install -r requirements.txt {to install dependencies}
+create .env file
+
+3. Frontend Setup
+cd frontend
+
+npm install
 
 Create .env:
 
-
-
-Run:
-
-flask run
-3. Frontend Setup
-cd frontend
-npm install
-npm run dev
 4. Docker Setup (Recommended)
-docker-compose up --build
+
+from root directory run: 
+  docker compose exec backend uv run flask db upgrade
+  docker compose down  
+  docker compose build backend
+  docker compose build frontend
+  docker compose up -d
+
+making changes: 
+  docker compose build --no-cache frontend or backend
+  docker compose up
+
 
 This starts:
 
@@ -188,6 +197,19 @@ PostgreSQL
 MongoDB
 
 🧪 Testing the App
+
+from root directory run: docker compose ps {to check if containers are running}
+docker compose logs -f backend {to monitor backend logs}
+docker compose logs -f frontend {to monitor frontend logs}
+docker compose logs -f {to monitor all logs}
+docker compose exec backend uv run flask db migrate -m "describe your change" {to create a migration}
+docker compose exec backend uv run flask db upgrade {to apply the migration}
+
+after adding new features
+docker compose exec backend uv run flask db migrate -m "describe your change" {to create a migration}
+docker compose exec backend uv run flask db upgrade {to apply the migration}
+docker compose build backend
+
 
 Register a user
 
@@ -209,6 +231,7 @@ SQL + NoSQL hybrid to demonstrate database understanding
 
 Modular backend structure to support microservices transition
 
+
 🧩 Microservices Consideration
 
 The system can be split into:
@@ -222,6 +245,8 @@ Progress Service (tracking)
 Logging Service (audit trail)
 
 Each module is already structured to allow easy separation.
+
+
 
 📊 Non-Functional Requirements
 
@@ -248,6 +273,8 @@ Simplicity
 Clear navigation
 
 Role-based dashboards
+
+
 
 📌 Future Improvements
 

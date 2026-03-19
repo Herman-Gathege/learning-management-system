@@ -1,3 +1,5 @@
+pymongo
+
 alembic==1.17.2
 amqp==5.3.1
 asgiref==3.8.1

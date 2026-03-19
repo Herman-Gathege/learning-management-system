@@ -20,8 +20,11 @@ services:
       - postgres
       - mongo
     environment:
+      - FLASK_APP=app
+      - FLASK_ENV=development
       - DATABASE_URL=postgresql://user:password@postgres:5432/lms
       - JWT_SECRET_KEY=supersecret
+      - SECRET_KEY=supersecret
       - MONGO_URI=mongodb://mongo:27017/lms
     volumes:
       - ./backend:/app
@@ -49,3 +52,5 @@ services:
 volumes:
   postgres_data:
   mongo_data:
+
+  

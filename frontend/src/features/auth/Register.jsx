@@ -1,91 +1,125 @@
-//frontend/src/features/auth/Register.jsx
-
 import { useState } from "react";
-import { registerOrg } from "../../api/auth";
-// import styles from "./AuthForm.module.css"; // import CSS module
+import { useNavigate } from "react-router-dom";
+import { registerUser, loginUser } from "../../api/auth";
 
 export default function Register() {
+  const navigate = useNavigate();
+
+  const [role, setRole] = useState("learner");
+  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [ownerName, setOwnerName] = useState("");
-  const [ownerEmail, setOwnerEmail] = useState("");
-  const [ownerPhone, setOwnerPhone] = useState("");
-  const [ownerPassword, setOwnerPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [orgName, setOrgName] = useState("");
+
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await registerOrg({
-      name,
-      owner_name: ownerName,
-      owner_email: ownerEmail,
-      owner_phone: ownerPhone,
-      owner_password: ownerPassword,
-    });
-    setMessage(res.message || res.error);
+
+    setLoading(true);
+    setMessage("");
+
+    const payload = {
+      full_name: name,
+      email,
+      password,
+      role,
+      organization_name: orgName || null,
+    };
+
+    try {
+      // ✅ 1. REGISTER
+      await registerUser(payload);
+
+      // ✅ 2. AUTO LOGIN
+      const loginRes = await loginUser({
+        email,
+        password,
+      });
+
+      // ✅ 3. STORE TOKENS
+      localStorage.setItem("token", loginRes.access_token);
+      localStorage.setItem("refresh", loginRes.refresh_token);
+
+      // ✅ 4. REDIRECT BASED ON ROLE
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/learner/dashboard");
+      }
+
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  
-
   return (
-  <div className="auth-page">
-    <form className="auth-card card form-stack" onSubmit={handleSubmit}>
-      <h2 className="text-center">Create Account</h2>
+    <div className="auth-page">
+      <form className="auth-card card form-stack" onSubmit={handleSubmit}>
+        <h2 className="text-center">Create Account</h2>
 
-      <input
-        className="input"
-        placeholder="Business Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
+        <select
+          className="input"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option value="learner">Learner</option>
+          <option value="admin">Admin</option>
+        </select>
 
-      <input
-        className="input"
-        placeholder="Owner Name"
-        value={ownerName}
-        onChange={(e) => setOwnerName(e.target.value)}
-        required
-      />
+        <input
+          className="input"
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
 
-      <input
-        type="email"
-        className="input"
-        placeholder="Owner Email"
-        autoComplete="email"
-        value={ownerEmail}
-        onChange={(e) => setOwnerEmail(e.target.value)}
-        required
-      />
+        <input
+          className="input"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-      <input
-        type="tel"
-        className="input"
-        placeholder="Owner Phone"
-        autoComplete="tel"
-        value={ownerPhone}
-        onChange={(e) => setOwnerPhone(e.target.value)}
-        required
-      />
+        <input
+          type="password"
+          className="input"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-      <input
-        type="password"
-        className="input"
-        placeholder="Password"
-        autoComplete="new-password"
-        value={ownerPassword}
-        onChange={(e) => setOwnerPassword(e.target.value)}
-        required
-      />
+        <input
+          className="input"
+          placeholder={
+            role === "admin"
+              ? "Organization Name (required)"
+              : "Organization Name (optional)"
+          }
+          value={orgName}
+          onChange={(e) => setOrgName(e.target.value)}
+        />
 
-      <button type="submit" className="btn btn-primary">
-        Register
-      </button>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? "Creating account..." : "Register"}
+        </button>
 
-      {message && (
-        <p className="text-center text-error mt-md">{message}</p>
-      )}
-    </form>
-  </div>
-);
-
+        {message && (
+          <p className="text-center text-error mt-md">{message}</p>
+        )}
+        <p className="text-sm text-center">
+          Don't have an account?{" "}
+          <a href="/login" className="text-link">
+            Login here
+          </a>
+        </p>
+      </form>
+    </div>
+  );
 }
