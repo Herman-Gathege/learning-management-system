@@ -16,6 +16,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 // Dashboard layouts
 import DashboardLayout from "../features/dashboard/layout/DashboardLayout";
+import StaffLayout from "../features/dashboard/layout/StaffLayout";
 // import OwnerDashboard from "../features/dashboard/OwnerDashboard";
 
 export default function AppRoutes() {
@@ -36,21 +37,23 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route
-          path="dashboard"
-          element={<DashboardContent roleLabel="Admin" />}
-        />
+        <Route path="dashboard" element={<DashboardContent />} />
+        <Route path="courses" element={<div>Admin Courses Page</div>} />
+        <Route path="courses/create" element={<div>Create Course Page</div>} />
       </Route>
 
       {/* ================= LEARNER ================= */}
       <Route
-        path="/learner/dashboard"
+        path="/learner"
         element={
           <ProtectedRoute allowedRoles={["learner"]}>
-            <StudentDashboard roleLabel="Learner" />
+            <StaffLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="dashboard" element={<StudentDashboard />} />
+        <Route path="courses" element={<div>Learner Courses Page</div>} />
+      </Route>
 
       {/* ================= FALLBACK ================= */}
       <Route path="*" element={<Navigate to="/" />} />

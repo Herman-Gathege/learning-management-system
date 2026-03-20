@@ -1,3 +1,4 @@
+# backend/app/models/course.py
 from app.extensions import db
 from datetime import datetime
 

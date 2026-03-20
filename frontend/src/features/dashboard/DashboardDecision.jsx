@@ -1,32 +1,25 @@
 //frontend/src/features/dashboard/DashboardDecision.jsx
-import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 export default function DashboardDecision() {
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        navigate("/login", { replace: true });
-        return;
-      }
+  // Wait until auth is resolved
+  if (loading) return <p>Loading dashboard...</p>;
 
-      // Redirect based on role
-      if (user.role === "admin") {
-        navigate("/admin/dashboard", { replace: true });
-      } else if (user.role === "learner") {
-        navigate("/learner/dashboard", { replace: true });
-      } else if (user.role === "super_admin") {
-      navigate("/super-admin/dashboard", { replace: true });    
-      } else {
-        // Unknown role fallback
-        navigate("/login", { replace: true });
-      }
-    }
-  }, [user, loading, navigate]);
+  // Not logged in
+  if (!user) return <Navigate to="/login" replace />;
 
-  return <p>Loading dashboard...</p>;
+  // Role-based routing
+  if (user.role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  if (user.role === "learner") {
+    return <Navigate to="/learner/dashboard" replace />;
+  }
+
+  // fallback
+  return <Navigate to="/login" replace />;
 }

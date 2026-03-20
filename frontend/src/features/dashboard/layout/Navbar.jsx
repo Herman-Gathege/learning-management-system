@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { FiMaximize, FiMinimize, FiChevronDown } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { ownerNavigation, staffNavigation, superAdminNavigation } from "../../../config/navigation";
-
+import { adminNavigation, learnerNavigation } from "../../../config/navigation";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -14,9 +13,6 @@ export default function Navbar() {
   const [isFullscreen, setIsFullscreen] = useState(
     !!document.fullscreenElement,
   );
-
-  
-
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -32,12 +28,8 @@ export default function Navbar() {
 
   if (!user) return <header className="navbar" />;
 
-   const navigation =
-    user.role === "admin"
-      ? ownerNavigation
-      : user.role === "super_admin"
-      ? superAdminNavigation
-      : staffNavigation;
+  const navigation =
+    user.role === "admin" ? adminNavigation : learnerNavigation;
 
   const formattedTime = currentTime.toLocaleTimeString([], {
     hour: "2-digit",
@@ -78,9 +70,8 @@ export default function Navbar() {
         <span className="text-bold">{formattedTime}</span>
       </div>
 
-     {/* RIGHT */}
+      {/* RIGHT */}
       <div className="relative flex items-center gap-xs">
-        
         {/* Avatar */}
         <div
           className="avatar cursor-pointer"
@@ -97,29 +88,26 @@ export default function Navbar() {
           }`}
         />
 
-{/* </div> */}
-
-        
+        {/* </div> */}
 
         {open && (
-            <div className="dropdown dropdown-lg">
-
-              {/* USER HEADER */}
-              <div className="dropdown-header">
-                <div className="avatar avatar-sm">
-                  (user.full_name?.charAt(0) || "U").toUpperCase()
-                </div>
-
-                <div className="dropdown-user-info">
-                  <div className="dropdown-name">{user.full_name}</div>
-                  <div className="dropdown-role">{user.role}</div>
-                </div>
+          <div className="dropdown dropdown-lg">
+            {/* USER HEADER */}
+            <div className="dropdown-header">
+              <div className="avatar avatar-sm">
+                (user.full_name?.charAt(0) || "U").toUpperCase()
               </div>
 
-              <div className="dropdown-divider" />
+              <div className="dropdown-user-info">
+                <div className="dropdown-name">{user.full_name}</div>
+                <div className="dropdown-role">{user.role}</div>
+              </div>
+            </div>
 
-              {/* PROFILE */}
-              {/* <NavLink
+            <div className="dropdown-divider" />
+
+            {/* PROFILE */}
+            {/* <NavLink
                 to="/owner/profile"
                 className="dropdown-item"
                 onClick={() => setOpen(false)}
@@ -127,40 +115,39 @@ export default function Navbar() {
                 My Profile
               </NavLink> */}
 
-              {/* NAVIGATION */}
-              {navigation.map((item) =>
-                item.children
-                  ? item.children.map((child) => (
-                      <NavLink
-                        key={child.path}
-                        to={child.path}
-                        className="dropdown-item"
-                        onClick={() => setOpen(false)}
-                      >
-                        {child.label}
-                      </NavLink>
-                    ))
-                  : (
-                    <NavLink
-                      key={item.path}
-                      to={item.path}
-                      className="dropdown-item"
-                      onClick={() => setOpen(false)}
-                    >
-                      {item.label}
-                    </NavLink>
-                  ),
-              )}
+            {/* NAVIGATION */}
+            {navigation.map((item) =>
+              item.children ? (
+                item.children.map((child) => (
+                  <NavLink
+                    key={child.path}
+                    to={child.path}
+                    className="dropdown-item"
+                    onClick={() => setOpen(false)}
+                  >
+                    {child.label}
+                  </NavLink>
+                ))
+              ) : (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className="dropdown-item"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </NavLink>
+              ),
+            )}
 
-              <div className="dropdown-divider" />
+            <div className="dropdown-divider" />
 
-              {/* LOGOUT */}
-              <button className="btn btn-secondary mr-sm ml-sm" onClick={logout}>
-                Logout
-              </button>
-
-            </div>
-          )}
+            {/* LOGOUT */}
+            <button className="btn btn-secondary mr-sm ml-sm" onClick={logout}>
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );

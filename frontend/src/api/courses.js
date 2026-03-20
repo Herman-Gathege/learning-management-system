@@ -1,3 +1,5 @@
+// frontend/src/api/courses.js
+
 import { apiFetch } from "./client";
 
 export const createCourse = async (data) => {
