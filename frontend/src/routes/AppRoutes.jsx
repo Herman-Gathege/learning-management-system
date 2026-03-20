@@ -8,7 +8,7 @@ import Register from "../features/auth/Register";
 
 // Dashboards
 import DashboardContent from "../features/dashboard/DashboardContent";
-import StudentDashboard from "../features/dashboard/StudentDashboard";
+// import LearnerDashboard from "../features/dashboard/LearnerDashboard";
 import DashboardDecision from "../features/dashboard/DashboardDecision";
 
 // Route protection
@@ -17,6 +17,7 @@ import ProtectedRoute from "./ProtectedRoute";
 // Dashboard layouts
 import DashboardLayout from "../features/dashboard/layout/DashboardLayout";
 import StaffLayout from "../features/dashboard/layout/StaffLayout";
+import LearnerDashboard from "../features/dashboard/LearnerDashboard";
 // import OwnerDashboard from "../features/dashboard/OwnerDashboard";
 
 export default function AppRoutes() {
@@ -51,7 +52,7 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<StudentDashboard />} />
+        <Route path="dashboard" element={<LearnerDashboard/>} />
         <Route path="courses" element={<div>Learner Courses Page</div>} />
       </Route>
 

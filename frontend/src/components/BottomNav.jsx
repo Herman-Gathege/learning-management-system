@@ -5,7 +5,9 @@ import {
   FiBox,
   FiUsers,
   FiMenu,
-  FiHome
+  FiHome,
+  FiBookOpen,
+  FiPlusSquare
 } from "react-icons/fi";
 import { useState } from "react";
 
@@ -16,25 +18,25 @@ export default function BottomNav() {
     <>
       <nav className="bottom-nav hidden-desktop">
 
-        <NavLink to="/owner/dashboard" end className="bottom-nav-item">
+        <NavLink to="/admin/dashboard" end className="bottom-nav-item">
          <FiHome />
          <span>Home</span>
        </NavLink>
 
-        <NavLink to="/owner/sales" className="bottom-nav-item">
-          <FiBarChart2 />
-          <span>Sales</span>
+        <NavLink to="/admin/courses" className="bottom-nav-item">
+          <FiBookOpen />
+          <span>Courses</span>
         </NavLink>
 
-        <NavLink to="/owner/stock" className="bottom-nav-item">
-          <FiBox />
-          <span>Stock</span>
+        <NavLink to="/admin/courses/create" className="bottom-nav-item">
+          <FiPlusSquare />
+          <span>Create Course</span>
         </NavLink>
 
-        <NavLink to="/owner/customers/debtors" className="bottom-nav-item">
+        {/* <NavLink to="/owner/customers/debtors" className="bottom-nav-item">
           <FiUsers />
           <span>Customers</span>
-        </NavLink>
+        </NavLink> */}
 
         
 

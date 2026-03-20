@@ -1,5 +1,6 @@
 import { FiHome, FiBookOpen, FiPlusSquare } from "react-icons/fi";
 
+// frontend/src/config/navigation.js
 export const adminNavigation = [
   {
     label: "Dashboard",
@@ -9,14 +10,14 @@ export const adminNavigation = [
   {
     label: "Courses",
     icon: FiBookOpen,
-    path: "/admin/courses",
-  },
-  {
-    label: "Create Course",
-    icon: FiPlusSquare,
-    path: "/admin/courses/create",
+    path: "/admin/courses", // Parent path
+    children: [
+      { label: "All Courses", path: "/admin/courses", icon: FiBookOpen },
+      { label: "Create Course", path: "/admin/courses/create", icon: FiPlusSquare },
+    ],
   },
 ];
+
 
 export const learnerNavigation = [
   {
