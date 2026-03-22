@@ -71,6 +71,10 @@
   overflow: visible; 
 } */
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .sidebar-header {
   position: relative;
   height: 64px;

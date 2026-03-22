@@ -17,8 +17,13 @@ import ProtectedRoute from "./ProtectedRoute";
 // Dashboard layouts
 import DashboardLayout from "../features/dashboard/layout/DashboardLayout";
 import StaffLayout from "../features/dashboard/layout/StaffLayout";
+
 import LearnerDashboard from "../features/dashboard/LearnerDashboard";
+import CreateCourse from "../features/courses/CreateCourse";
 // import OwnerDashboard from "../features/dashboard/OwnerDashboard";
+import AdminCourses from "../features/courses/AdminCourses";
+import AddCourseContent from "../features/courses/AddCourseContent";
+import CourseDetails from "../features/courses/CourseDetails";
 
 export default function AppRoutes() {
   return (
@@ -39,8 +44,13 @@ export default function AppRoutes() {
         }
       >
         <Route path="dashboard" element={<DashboardContent />} />
-        <Route path="courses" element={<div>Admin Courses Page</div>} />
-        <Route path="courses/create" element={<div>Create Course Page</div>} />
+        <Route path="courses" element={<AdminCourses />} />
+        <Route path="courses/create" element={<CreateCourse />} />
+        <Route
+          path="courses/:courseId/content"
+          element={<AddCourseContent />}
+        />
+        <Route path="courses/:courseId" element={<CourseDetails />} />
       </Route>
 
       {/* ================= LEARNER ================= */}
@@ -52,7 +62,7 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<LearnerDashboard/>} />
+        <Route path="dashboard" element={<LearnerDashboard />} />
         <Route path="courses" element={<div>Learner Courses Page</div>} />
       </Route>
 
