@@ -14,6 +14,7 @@ export default function CoursePlayer() {
   const [content, setContent] = useState(null);
   const [activeLesson, setActiveLesson] = useState(null);
   const [progress, setProgress] = useState([]);
+  const [openModules, setOpenModules] = useState({});
 
   useEffect(() => {
     loadCourse();
@@ -27,6 +28,13 @@ export default function CoursePlayer() {
     setProgress(p);
   };
 
+  const toggleModule = (index) => {
+    setOpenModules((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
   const handleComplete = async (moduleIndex, lessonIndex) => {
     await markLessonComplete({
       course_id: Number(courseId),
@@ -37,7 +45,12 @@ export default function CoursePlayer() {
     await loadCourse();
   };
 
-  if (!content) return <div className="p-6">Loading...</div>;
+  if (!content)
+    return (
+      <div className="p-lg text-center text-muted">
+        Loading course...
+      </div>
+    );
 
   /* -----------------------------
      Calculate progress
@@ -60,56 +73,79 @@ export default function CoursePlayer() {
     <div className="flex h-screen">
 
       {/* Sidebar */}
-      <div className="w-1/3 border-r p-4 overflow-y-auto">
+      <div className="w-1/3 border-r p-lg overflow-y-auto flex flex-col gap-md">
 
-        <h3 className="font-bold mb-sm">Course Content</h3>
+        <h3 className="text-lg text-bold">
+          Course Content
+        </h3>
 
         {content.modules?.map((mod, i) => (
-          <div key={i} className="mb-md">
+          <div key={i} className="expanded-card">
 
-            <h4 className="font-bold">{mod.title}</h4>
+            {/* Module Header */}
+            <div
+              className="flex justify-between items-center cursor-pointer"
+              onClick={() => toggleModule(i)}
+            >
+              <h4 className="text-bold">
+                {mod.title}
+              </h4>
 
-            <ul className="pl-4">
+              <span className="text-sm text-muted">
+                {openModules[i] ? "▲" : "▼"}
+              </span>
+            </div>
 
-              {mod.lessons?.map((lesson, j) => {
+            {/* Lessons */}
+            {openModules[i] && (
+              <ul className="flex flex-col gap-xs mt-sm">
 
-                const completed = progress.find(
-                  (p) =>
-                    p.module_index === i &&
-                    p.lesson_index === j
-                );
+                {mod.lessons?.map((lesson, j) => {
 
-                return (
-                  <li
-                    key={j}
-                    className={`cursor-pointer hover:underline ${
-                      completed ? "text-green-600" : ""
-                    }`}
-                    onClick={() =>
-                      setActiveLesson({ ...lesson, i, j })
-                    }
-                  >
-                    {completed ? "✔ " : ""}
-                    {lesson.title}
-                  </li>
-                );
-              })}
+                  const completed = progress.find(
+                    (p) =>
+                      p.module_index === i &&
+                      p.lesson_index === j
+                  );
 
-            </ul>
+                  return (
+                    <li
+                      key={j}
+                      className={`cursor-pointer text-sm ${
+                        completed
+                          ? "text-green-600"
+                          : "hover:underline"
+                      }`}
+                      onClick={() =>
+                        setActiveLesson({ ...lesson, i, j })
+                      }
+                    >
+                      {completed ? "✔ " : ""}
+                      {lesson.title}
+                    </li>
+                  );
+                })}
+
+              </ul>
+            )}
 
           </div>
         ))}
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-lg flex flex-col gap-md">
 
         {/* Progress Bar */}
+        <div className="card">
 
-        <div className="mb-md">
-          <div className="flex justify-between mb-xs text-sm">
-            <span>Course Progress</span>
-            <span>{progressPercent}%</span>
+          <div className="flex justify-between mb-sm text-sm">
+            <span className="text-bold">
+              Course Progress
+            </span>
+            <span className="text-muted">
+              {progressPercent}%
+            </span>
           </div>
 
           <div className="w-full bg-gray-200 h-3 rounded">
@@ -118,22 +154,27 @@ export default function CoursePlayer() {
               style={{ width: `${progressPercent}%` }}
             />
           </div>
+
         </div>
 
+        {/* Lesson Content */}
         {activeLesson ? (
-          <>
-            <h2 className="font-bold mb-md">
+          <div className="card">
+
+            <h2 className="text-xl text-bold mb-md">
               {activeLesson.title}
             </h2>
 
             {activeLesson.type === "video" ? (
               <iframe
                 src={activeLesson.content}
-                className="w-full h-64 mb-md"
+                className="w-full h-72 mb-md"
                 title="Lesson Video"
               />
             ) : (
-              <p className="mb-md">{activeLesson.content}</p>
+              <p className="mb-md">
+                {activeLesson.content}
+              </p>
             )}
 
             <button
@@ -144,11 +185,16 @@ export default function CoursePlayer() {
             >
               Mark Complete
             </button>
-          </>
+
+          </div>
         ) : (
-          <p>Select a lesson</p>
+          <div className="card text-center text-muted">
+            Select a lesson from the sidebar to start learning
+          </div>
         )}
+
       </div>
+
     </div>
   );
 }

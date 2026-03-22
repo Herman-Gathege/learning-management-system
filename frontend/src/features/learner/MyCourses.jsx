@@ -13,23 +13,48 @@ export default function MyCourses() {
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-lg font-bold mb-md">My Courses</h2>
+    <div className="p-lg flex flex-col gap-lg">
 
-      <div className="grid grid-cols-3 gap-md">
-        {courses.map((course) => (
-          <div
-            key={course.id}
-            className="card p-md cursor-pointer hover:shadow-md"
-            onClick={() =>
-              navigate(`/learner/learn/${course.id}`)
-            }
-          >
-            <h3 className="font-bold">{course.title}</h3>
-            <p className="text-muted">{course.category}</p>
-          </div>
-        ))}
+      {/* Page Header */}
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl text-bold">My Courses</h2>
       </div>
+
+      {/* Empty State */}
+      {courses.length === 0 ? (
+        <div className="card text-center text-muted">
+          You haven't enrolled in any courses yet.
+        </div>
+      ) : (
+        <div className="grid grid-cols-3 gap-md">
+
+          {courses.map((course) => (
+            <div
+              key={course.id}
+              className="card cursor-pointer hover:shadow-md transition flex flex-col gap-sm"
+              onClick={() =>
+                navigate(`/learner/learn/${course.id}`)
+              }
+            >
+
+              <h3 className="text-bold">
+                {course.title}
+              </h3>
+
+              <p className="text-sm text-muted">
+                {course.category}
+              </p>
+
+              <button className="btn btn-primary mt-sm">
+                Continue Learning
+              </button>
+
+            </div>
+          ))}
+
+        </div>
+      )}
+
     </div>
   );
 }
