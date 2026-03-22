@@ -175,6 +175,7 @@ Create .env:
 4. Docker Setup (Recommended)
 
 from root directory run: 
+  docker compose exec backend uv run flask db migrate -m "add category to courses"
   docker compose exec backend uv run flask db upgrade
   docker compose down  
   docker compose build backend

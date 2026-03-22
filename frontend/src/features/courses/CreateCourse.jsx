@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function CreateCourse() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ export default function CreateCourse() {
     setLoading(true);
 
     try {
-      const course = await createCourse({ title, description });
+      const course = await createCourse({ title, description, category });
 
       // 👉 redirect to add content step
       navigate(`/admin/courses/${course.id}/content`);
@@ -40,6 +41,18 @@ export default function CreateCourse() {
           onChange={(e) => setTitle(e.target.value)}
           required
         />
+        <select
+          className="input"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+        >
+          <option value="">Select Category</option>
+          <option value="programming">Programming</option>
+          <option value="design">Design</option>
+          <option value="marketing">Marketing</option>
+          <option value="business">Business</option>
+        </select>
 
         <textarea
           className="input h-32"

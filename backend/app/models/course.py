@@ -6,7 +6,7 @@ class Course(db.Model):
     __tablename__ = "courses"
 
     id = db.Column(db.Integer, primary_key=True)
-
+    category = db.Column(db.String(100), nullable=False)  # ✅ NEW
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
 
@@ -18,6 +18,7 @@ class Course(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
+            "category": self.category,
             "title": self.title,
             "description": self.description,
             "created_by": self.created_by,

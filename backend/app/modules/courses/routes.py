@@ -23,6 +23,7 @@ def create_course():
     course = Course(
         title=data.get("title"),
         description=data.get("description"),
+        category=data.get("category"),  # ✅ NEW
         created_by=int(get_jwt_identity()),
         organization_id=claims.get("organization_id")
     )
