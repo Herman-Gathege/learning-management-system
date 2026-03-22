@@ -32,7 +32,7 @@ export default function AdminCourses() {
                 navigate(`/admin/courses/${course.id}/content`);
               }}
             >
-              Add Content
+              Add Module
             </button>
           </div>
         </div>

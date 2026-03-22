@@ -1,4 +1,5 @@
 // frontend/src/features/courses/AddCourseContent.jsx
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { addCourseContent } from "../../api/courses";
@@ -19,13 +20,73 @@ export default function AddCourseContent() {
     },
   ]);
 
+  // Add new module
+  const addModule = () => {
+    setModules([
+      ...modules,
+      {
+        title: "",
+        lessons: [
+          {
+            title: "",
+            type: "text",
+            content: "",
+          },
+        ],
+      },
+    ]);
+  };
+
+  // Add lesson to module
+  const addLesson = (modIndex) => {
+    const updated = [...modules];
+
+    updated[modIndex].lessons.push({
+      title: "",
+      type: "text",
+      content: "",
+    });
+
+    setModules(updated);
+  };
+
+  // Update module title
+  const updateModuleTitle = (modIndex, value) => {
+    const updated = [...modules];
+    updated[modIndex].title = value;
+    setModules(updated);
+  };
+
+  // Update lesson field
+  const updateLesson = (modIndex, lessonIndex, field, value) => {
+    const updated = [...modules];
+    updated[modIndex].lessons[lessonIndex][field] = value;
+    setModules(updated);
+  };
+
+  // Save modules to backend
   const handleSubmit = async () => {
     try {
       await addCourseContent(courseId, { modules });
-      alert("Content saved!");
+
+      alert("✅ Content saved successfully!");
+
+      // reset form
+      setModules([
+        {
+          title: "",
+          lessons: [
+            {
+              title: "",
+              type: "text",
+              content: "",
+            },
+          ],
+        },
+      ]);
     } catch (err) {
       console.error(err);
-      alert("Failed to save content");
+      alert("❌ Failed to save content");
     }
   };
 
@@ -35,64 +96,104 @@ export default function AddCourseContent() {
 
       {modules.map((mod, modIndex) => (
         <div key={modIndex} className="card mb-md p-md">
+
+          {/* Module Header */}
+          <h3 className="font-bold mb-sm">
+            Module {modIndex + 1}
+          </h3>
+
+          {/* Module Title */}
           <input
-            className="input"
+            className="input mb-sm"
             placeholder="Module Title"
             value={mod.title}
-            onChange={(e) => {
-              const updated = [...modules];
-              updated[modIndex].title = e.target.value;
-              setModules(updated);
-            }}
+            onChange={(e) =>
+              updateModuleTitle(modIndex, e.target.value)
+            }
           />
 
+          {/* Lessons */}
           {mod.lessons.map((lesson, lessonIndex) => (
-            <div key={lessonIndex} className="mt-sm">
+            <div key={lessonIndex} className="mt-sm p-sm border rounded">
+
+              <p className="font-semibold mb-xs">
+                Lesson {lessonIndex + 1}
+              </p>
+
               <input
-                className="input"
+                className="input mb-xs"
                 placeholder="Lesson Title"
                 value={lesson.title}
-                onChange={(e) => {
-                  const updated = [...modules];
-                  updated[modIndex].lessons[lessonIndex].title =
-                    e.target.value;
-                  setModules(updated);
-                }}
+                onChange={(e) =>
+                  updateLesson(
+                    modIndex,
+                    lessonIndex,
+                    "title",
+                    e.target.value
+                  )
+                }
               />
 
               <select
-                className="input mt-sm mb-sm"
+                className="input mb-xs"
                 value={lesson.type}
-                onChange={(e) => {
-                  const updated = [...modules];
-                  updated[modIndex].lessons[lessonIndex].type =
-                    e.target.value;
-                  setModules(updated);
-                }}
+                onChange={(e) =>
+                  updateLesson(
+                    modIndex,
+                    lessonIndex,
+                    "type",
+                    e.target.value
+                  )
+                }
               >
-                <option value="text">Text</option>
-                <option value="video">Video</option>
+                <option value="text">Text Lesson</option>
+                <option value="video">Video Lesson</option>
               </select>
 
               <textarea
                 className="input h-24"
-                placeholder="Content / URL"
+                placeholder="Lesson content or video URL"
                 value={lesson.content}
-                onChange={(e) => {
-                  const updated = [...modules];
-                  updated[modIndex].lessons[lessonIndex].content =
-                    e.target.value;
-                  setModules(updated);
-                }}
+                onChange={(e) =>
+                  updateLesson(
+                    modIndex,
+                    lessonIndex,
+                    "content",
+                    e.target.value
+                  )
+                }
               />
             </div>
           ))}
+
+          {/* Add Lesson Button */}
+          <button
+            className="btn btn-secondary mt-sm"
+            onClick={() => addLesson(modIndex)}
+          >
+            + Add Lesson
+          </button>
+
         </div>
       ))}
 
-      <button className="btn btn-primary" onClick={handleSubmit}>
-        Save Content
+      {/* Add Module Button */}
+      <button
+        className="btn btn-secondary mb-md"
+        onClick={addModule}
+      >
+        + Add Module
       </button>
+
+      {/* Save Button */}
+      <div>
+        <button
+          className="btn btn-primary"
+          onClick={handleSubmit}
+        >
+          Save Content
+        </button>
+      </div>
     </div>
   );
 }
