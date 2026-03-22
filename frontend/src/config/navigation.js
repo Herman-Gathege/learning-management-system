@@ -8,7 +8,7 @@ export const adminNavigation = [
     path: "/admin/dashboard",
   },
   {
-    label: "Courses",
+    label: "Manage Courses",
     icon: FiBookOpen,
     path: "/admin/courses", // Parent path
     children: [

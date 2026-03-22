@@ -9,7 +9,7 @@ export default function LearnerDashboard() {
   return (
     <div className="p-6">
       <div className="text-lg font-bold mb-md">
-        Welcome,{" "}
+        Welcome to greatness,{" "}
         <span className="company-blue text-bold">
           {user.full_name}
         </span>{" "}
@@ -19,7 +19,7 @@ export default function LearnerDashboard() {
       <div className="card">
         <h3 className="text-md text-bold mb-sm">Your Learning</h3>
         <p className="text-muted">
-          You are enrolled in courses. Start learning from the courses section.
+          Below are the course offerings pick a course and start learning.
         </p>
       </div>
     </div>

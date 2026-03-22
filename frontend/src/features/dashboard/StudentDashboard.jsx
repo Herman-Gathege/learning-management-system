@@ -16,7 +16,7 @@ export function StaffSales() {
   return (
     <>
       <header className="mb-md">
-        <h2 className="text-lg text-bold">Welcome, <span>{user.full_name}</span> 👋</h2>
+        <h2 className="text-lg text-bold">Welcome to the road to greatness, <span>{user.full_name}</span> 👋</h2>
         {/* <p>Organization: {organization?.name}</p>
         <p>Role: Staff</p> */}
       </header>
