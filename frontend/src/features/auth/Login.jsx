@@ -31,7 +31,7 @@ export default function Login() {
       // const role = payload.role;
 
       await login();
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
 
       
     } catch (err) {

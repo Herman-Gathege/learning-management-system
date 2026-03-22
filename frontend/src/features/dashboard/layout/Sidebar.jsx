@@ -1,100 +1,67 @@
-//frontend/src/features/dashboard/layout/Sidebar.jsx
+// frontend/src/features/dashboard/layout/Sidebar.jsx
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import { useEffect, useState } from "react";
+import { FiChevronDown } from "react-icons/fi";
 import {
-  FiChevronDown,
-  FiHome,
-  FiBarChart2,
-  FiBox,
-  FiUsers,
-  FiFileText,
-  FiSettings,
-} from "react-icons/fi";
+  adminNavigation,
+  learnerNavigation,
+} from "../../../config/navigation";
 
-export default function Sidebar() {
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Sidebar component that displays role-based navigation.
+ * 
+ * Handles collapse state and persist it to local storage.
+ * 
+ * Active link styling is applied based on the current route.
+ * 
+ * @param {Object} user - Authenticated user object.
+ * @param {Object} organization - Organization object associated with the user.
+ * @param {Object} location - The current route location.
+ */
+/*******  aa49bb5b-63b6-4822-8cd7-e54238c38ecd  *******/export default function Sidebar() {
   const { user, organization } = useAuth();
   const location = useLocation();
-
+  
   // ---------------------------
   // Dropdown state
   // ---------------------------
+  const [openMenus, setOpenMenus] = useState({});
+
+  // ---------------------------
+  // Role-based navigation
+  // ---------------------------
+  const navigation = user?.role === "admin" ? adminNavigation : learnerNavigation;
+
+  // Initialize dropdowns based on current path on mount
+  useEffect(() => {
+    const initialState = {};
+    navigation.forEach((item) => {
+      if (item.children && location.pathname.startsWith(item.path)) {
+        initialState[item.label] = true;
+      }
+    });
+    setOpenMenus(initialState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on load
+
+  const toggleMenu = (label) => {
+    setOpenMenus(prev => ({ ...prev, [label]: !prev[label] }));
+  };
+
+  // ---------------------------
+  // Collapse state (persisted)
+  // ---------------------------
   const [collapsed, setCollapsed] = useState(() => {
-    const saved = localStorage.getItem("sidebarCollapsed");
-    return saved === "true"; // default false if null
+    return localStorage.getItem("sidebarCollapsed") === "true";
   });
-  // const [stockOpen, setStockOpen] = useState(false);
-  // const [customerOpen, setCustomerOpen] = useState(false);
-  // const [supplierOpen, setSupplierOpen] = useState(false);
 
-  // ---------------------------
-  // Role flags
-  // ---------------------------
-  const isOwner = user?.role === "admin";
-  const isStaff = user?.role === "learner";  
-  const isSuperAdmin = user?.role === "super_admin";
-
-  // ---------------------------
-  // Routes
-  // ---------------------------
-  // const stockRoutes = [
-  //   "/owner/stock",
-  //   "/owner/stock/add",
-  //   "/owner/stock/history",
-  // ];
-
-  // const customerRoutes = [
-  //   "/owner/customers/debtors",
-  //   "/owner/customers/creditors",
-  //   "/owner/customers/add",
-  //   "/owner/all/customers",
-  // ];
-
-  // const supplierRoutes = [
-  //   "/owner/suppliers",
-  //   "/owner/supplier-purchases",
-  //   "/owner/supplier-payments",
-  // ];
-
-  // const isStockRouteActive = stockRoutes.some((path) =>
-  //   location.pathname.startsWith(path),
-  // );
-
-  // const isCustomerRouteActive = customerRoutes.some((path) =>
-  //   location.pathname.startsWith(path),
-  // );
-
-  // const isSupplierRouteActive = supplierRoutes.some((path) =>
-  //   location.pathname.startsWith(path),
-  // );
-
-  // ---------------------------
-  // Open dropdowns if route is active
-  // ---------------------------
-  // useEffect(() => {
-  //   if (isStockRouteActive) setStockOpen(true);
-  //   if (isCustomerRouteActive) setCustomerOpen(true);
-  //   if (isSupplierRouteActive) setSupplierOpen(true);
-  // }, [isStockRouteActive, isCustomerRouteActive, isSupplierRouteActive]);
-
-  // /* 🔥 IMPORTANT FIX */
-  // useEffect(() => {
-  //   if (collapsed) {
-  //     setStockOpen(false);
-  //     setCustomerOpen(false);
-  //     setSupplierOpen(false);
-  //   }
-  // }, [collapsed]);
-
-  // useEffect(() => {
-  // localStorage.setItem("sidebarCollapsed", collapsed);
-  // }, [collapsed]);
-
+  useEffect(() => {
+    localStorage.setItem("sidebarCollapsed", collapsed);
+  }, [collapsed]);
 
   if (!user) return null;
-
-  const linkClass = ({ isActive }) =>
-    `sidebar-link ${isActive ? "active" : ""}`;
 
   return (
     <aside
@@ -106,11 +73,10 @@ export default function Sidebar() {
       <div className="sidebar-header">
         {!collapsed && (
           <h2 className="sidebar-logo text-lg font-bold company-blue">
-            {organization?.name || "Azani SmartDuka"}
+            {organization?.name || "LMS Platform"}
           </h2>
         )}
 
-        {/* Collapse button with < or > */}
         <button
           type="button"
           className="sidebar-collapse-btn mr-sm"
@@ -122,166 +88,57 @@ export default function Sidebar() {
 
       {/* ================= NAV ================= */}
       <nav className="sidebar-nav flex flex-col gap-sm p-sm">
-        {/* ================= OWNER ================= */}
-        {isOwner && (
-          <>
-            <NavLink to="/admin/dashboard" end className={linkClass}>
-              <FiHome />
-              {!collapsed && <span>Home</span>}
-            </NavLink>
+        {navigation.map((item) => {
+          const hasChildren = item.children && item.children.length > 0;
+          const isActiveParent = location.pathname.startsWith(item.path);
+          const isMenuOpen = openMenus[item.label];
 
-            {/* <NavLink to="/owner/sales" className={linkClass}>
-              <FiBarChart2 />
-              {!collapsed && <span>View All Sales</span>}
-            </NavLink> */}
-
-            {/* -------- SUPPLIERS -------- */}
-            {/* <button
-              type="button"
-              className={`sidebar-link ${
-                isSupplierRouteActive ? "active" : ""
-              }`}
-              onClick={() => setSupplierOpen((o) => !o)}
-            >
-              <FiUsers />
-              {!collapsed && <span>Suppliers</span>}
-              {!collapsed && (
-                <FiChevronDown
-                  className={`chevron ${supplierOpen ? "rotated" : ""}`}
-                />
-              )}
-            </button>
-
-            {supplierOpen && !collapsed && (
-              <div className="sidebar-submenu">
-                <NavLink to="/owner/suppliers" className={linkClass}>
-                  Supplier List
-                </NavLink>
-                <NavLink to="/owner/supplier-purchases" className={linkClass}>
-                  Supplier Purchases
-                </NavLink>
-                <NavLink to="/owner/suppliers/creditors" className={linkClass}>
-                  I owe them
-                </NavLink>
+          if (hasChildren && !collapsed) {
+            return (
+              <div key={item.label} className="menu-group">
+                <button 
+                  type="button"
+                  onClick={() => toggleMenu(item.label)}
+                  className={`sidebar-link w-full ${isActiveParent ? "active" : ""}`}
+                >
+                  <item.icon />
+                  <span>{item.label}</span>
+                  <FiChevronDown 
+                    className={`ml-auto transition-transform ${isMenuOpen ? "rotated" : ""}`} 
+                  />
+                </button>
+                
+                {isMenuOpen && (
+                  <div className="sidebar-submenu pl-md flex flex-col gap-xs mt-sm">
+                    {item.children.map((child) => (
+                      <NavLink 
+                        key={child.path} 
+                        to={child.path} 
+                        end 
+                        className={({ isActive }) => `sidebar-link sub-link ${isActive ? "active" : ""}`}
+                      >
+                        <child.icon size={14} />
+                        <span>{child.label}</span>
+                      </NavLink>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
+            );
+          }
 
-            {/* -------- STOCK -------- */}
-            {/* <button
-              type="button"
-              className={`sidebar-link ${isStockRouteActive ? "active" : ""}`}
-              onClick={() => setStockOpen((o) => !o)}
+          // Regular link (no children)
+          return (
+            <NavLink 
+              key={item.path} 
+              to={item.path} 
+              className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
             >
-              <FiBox />
-              {!collapsed && <span>Manage Stock</span>}
-              {!collapsed && (
-                <FiChevronDown
-                  className={`chevron ${stockOpen ? "rotated" : ""}`}
-                />
-              )}
-            </button>
-
-            {stockOpen && !collapsed && (
-              <div className="sidebar-submenu">
-                <NavLink to="/owner/stock" end className={linkClass}>
-                  Stock List
-                </NavLink>
-                <NavLink to="/owner/stock/add" className={linkClass}>
-                  Add Stock
-                </NavLink>
-                <NavLink to="/owner/stock/history" className={linkClass}>
-                  Stock History
-                </NavLink>
-              </div>
-            )}
-
-            {/* -------- CUSTOMERS -------- */}
-            {/* <button
-              type="button"
-              className={`sidebar-link ${
-                isCustomerRouteActive ? "active" : ""
-              }`}
-              onClick={() => setCustomerOpen((o) => !o)}
-            >
-              <FiUsers />
-              {!collapsed && <span>Customers</span>}
-              {!collapsed && (
-                <FiChevronDown
-                  className={`chevron ${customerOpen ? "rotated" : ""}`}
-                />
-              )}
-            </button>
-
-            {customerOpen && !collapsed && (
-              <div className="sidebar-submenu">
-                <NavLink to="/owner/customers/debtors" className={linkClass}>
-                  They owe me
-                </NavLink>
-                <NavLink to="/owner/customers/add" className={linkClass}>
-                  Add Customer
-                </NavLink>
-                <NavLink to="/owner/all/customers" className={linkClass}>
-                  Customers List
-                </NavLink>
-              </div>
-            )}
-
-            <NavLink to="/owner/staff" className={linkClass}>
-              <FiUsers />
-              {!collapsed && <span>Manage Staff</span>}
+              <item.icon />
+              {!collapsed && <span>{item.label}</span>}
             </NavLink>
-
-            <NavLink to="/owner/reports" className={linkClass}>
-              <FiFileText />
-              {!collapsed && <span>Reports</span>}
-            </NavLink>
-
-            <NavLink to="/owner/settings" className={linkClass}>
-              <FiSettings />
-              {!collapsed && <span>Settings</span>}
-            </NavLink> */}
-          </>
-        )}
-
-        {/* ================= STAFF ================= */}
-        {isStaff && (
-          <>
-            <NavLink to="/staff" end className={linkClass}>
-              <FiHome />
-              {!collapsed && <span>Dashboard</span>}
-            </NavLink>
-
-            {/* <NavLink to="/staff/profile" className={linkClass}>
-              <FiUsers />
-              {!collapsed && <span>My Profile</span>}
-            </NavLink>
-
-            <NavLink to="/staff/password" className={linkClass}>
-              <FiFileText />
-              {!collapsed && <span>Change Password</span>}
-            </NavLink> */}
-          </>
-        )}
-
-        {/* ================= SUPER ADMIN ================= */}
-        {isSuperAdmin && (
-          <>
-            <NavLink to="/super-admin/dashboard" end className={linkClass}>
-              <FiHome />
-              {!collapsed && <span>Dashboard</span>}
-            </NavLink>
-
-            <NavLink to="/super-admin/organizations" className={linkClass}>
-              <FiUsers />
-              {!collapsed && <span>Organizations</span>}
-            </NavLink>
-
-            <NavLink to="/super-admin/reports" className={linkClass}>
-              <FiFileText />
-              {!collapsed && <span>System Reports</span>}
-            </NavLink>
-          </>
-        )}
+          );
+        })}
       </nav>
     </aside>
   );

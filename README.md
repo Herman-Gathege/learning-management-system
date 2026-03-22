@@ -175,13 +175,20 @@ Create .env:
 4. Docker Setup (Recommended)
 
 from root directory run: 
+  docker compose exec backend uv run flask db migrate -m "add category to courses"
   docker compose exec backend uv run flask db upgrade
   docker compose down  
   docker compose build backend
   docker compose build frontend
   docker compose up -d
 
+postgres in use issue?:
+  sudo lsof -i :5432
+  sudo systemctl stop postgresql
+
 making changes: 
+  
+
   docker compose build --no-cache frontend or backend
   docker compose up
 
@@ -209,6 +216,9 @@ after adding new features
 docker compose exec backend uv run flask db migrate -m "describe your change" {to create a migration}
 docker compose exec backend uv run flask db upgrade {to apply the migration}
 docker compose build backend
+
+when done with the docker and want to close :
+press w then  press d
 
 
 Register a user

@@ -1,14 +1,36 @@
 # backend/app/__init__.py
+import time
 from flask import Flask
 from flask_cors import CORS
+from sqlalchemy.exc import OperationalError
+
 from .config import Config
 from .extensions import db, jwt, migrate, init_mongo
+import time
+from sqlalchemy.exc import OperationalError
 
 from .auth.routes import auth_bp
 from .modules.courses.routes import course_bp
-from app.modules.debug.routes import debug_bp
+from app.modules.learner.routes import learner_bp
+
+# from app.modules.debug.routes import debug_bp
 
 
+def wait_for_db(app):
+    retries = 10
+    delay = 2
+
+    for i in range(retries):
+        try:
+            with app.app_context():
+                db.engine.connect()
+            print("✅ Connected to Postgres!")
+            return
+        except OperationalError:
+            print(f"⏳ Waiting for Postgres... ({i+1}/{retries})")
+            time.sleep(delay)
+
+    raise Exception("❌ Database not ready after multiple attempts")
 
 
 def create_app():
@@ -19,8 +41,27 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
-    
-    init_mongo(app)
+
+    init_mongo(app)  
+
+
+    def wait_for_postgres(app, retries=10, delay=3):
+        from .extensions import db
+
+        for i in range(retries):
+            try:
+                with app.app_context():
+                    db.engine.connect()
+                print("✅ Connected to Postgres!")
+                return
+            except OperationalError:
+                print(f"⏳ Postgres not ready... retry {i+1}/{retries}")
+                time.sleep(delay)
+
+        raise RuntimeError("❌ Could not connect to Postgres")
+
+    # ✅ WAIT FOR POSTGRES HERE
+    wait_for_db(app)
 
     # JWT error handlers
     @jwt.unauthorized_loader
@@ -34,8 +75,9 @@ def create_app():
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):
         return {"error": "Token expired"}, 401
-
     
+    print("🔥 ACTUAL DB URL:", app.config["SQLALCHEMY_DATABASE_URI"])
+
     CORS(
         app,
         origins=["http://localhost:5173", "http://localhost:3000"],
@@ -44,14 +86,13 @@ def create_app():
         supports_credentials=True
     )
 
-
-
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(course_bp, url_prefix="/api/courses")
-    # app.register_blueprint(debug_bp, url_prefix="/debug")
-    app.register_blueprint(debug_bp)
+    app.register_blueprint(learner_bp, url_prefix="/api/learner")
 
+    # app.register_blueprint(debug_bp)
 
+    
 
     return app
