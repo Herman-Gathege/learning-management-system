@@ -11,6 +11,8 @@ from sqlalchemy.exc import OperationalError
 
 from .auth.routes import auth_bp
 from .modules.courses.routes import course_bp
+from app.modules.learner.routes import learner_bp
+
 # from app.modules.debug.routes import debug_bp
 
 
@@ -87,6 +89,8 @@ def create_app():
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(course_bp, url_prefix="/api/courses")
+    app.register_blueprint(learner_bp, url_prefix="/api/learner")
+
     # app.register_blueprint(debug_bp)
 
     

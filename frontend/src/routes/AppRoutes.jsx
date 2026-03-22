@@ -24,6 +24,10 @@ import CreateCourse from "../features/courses/CreateCourse";
 import AdminCourses from "../features/courses/AdminCourses";
 import AddCourseContent from "../features/courses/AddCourseContent";
 import CourseDetails from "../features/courses/CourseDetails";
+import CourseList from "../features/learner/CourseList";
+import CourseDetailsLearner from "../features/learner/CourseDetailsLearner";
+import CoursePlayer from "../features/learner/CoursePlayer";
+import MyCourses from "../features/learner/MyCourses";
 
 export default function AppRoutes() {
   return (
@@ -63,7 +67,10 @@ export default function AppRoutes() {
         }
       >
         <Route path="dashboard" element={<LearnerDashboard />} />
-        <Route path="courses" element={<div>Learner Courses Page</div>} />
+        <Route path="courses" element={<CourseList />} />
+        <Route path="courses/:courseId" element={<CourseDetailsLearner />} />
+        <Route path="learn/:courseId" element={<CoursePlayer />} />
+        <Route path="my-courses" element={<MyCourses />} />
       </Route>
 
       {/* ================= FALLBACK ================= */}
