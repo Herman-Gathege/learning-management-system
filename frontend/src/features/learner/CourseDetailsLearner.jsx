@@ -23,7 +23,7 @@ export default function CourseDetails() {
     setLoading(false);
 
     // 👉 go to learning page
-    navigate(`/learner/learn/${courseId}`);
+    navigate("/learner/my-courses");
   };
 
   if (!data) return <div className="p-6">Loading...</div>;

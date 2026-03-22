@@ -30,4 +30,9 @@ export const learnerNavigation = [
     icon: FiBookOpen,
     path: "/learner/courses",
   },
+  {
+    label: "My Courses",
+    icon: FiBookOpen,
+    path: "/learner/my-courses",
+  },
 ];
